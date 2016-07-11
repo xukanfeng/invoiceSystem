@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias alias="HashMap" type="java.util.HashMap" />
+        <typeAlias alias="Manager" type="com.cane.model.ManagerEntity" />
+        <typeAlias alias="ClientData" type="com.cane.model.ClientDataEntity" />
+        <typeAlias alias="InvoiceRecord" type="com.cane.model.InvoiceRecordEntity" />
+        <typeAlias alias="TaxcontrolSetting" type="com.cane.model.TaxcontrolSettingEntity" />
+    </typeAliases>
+    <mappers>
+        <mapper resource="sql/ManagerDao.xml" />
+        <mapper resource="sql/ClientDataDao.xml" />
+        <mapper resource="sql/InvoiceRecordDao.xml" />
+        <mapper resource="sql/TaxcontrolSettingDao.xml" />
+    </mappers>
+</configuration>

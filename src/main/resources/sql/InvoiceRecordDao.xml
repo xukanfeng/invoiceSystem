@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InvoiceRecordDao">
+	<resultMap type="InvoiceRecord" id="resultInvoiceRecordList">
+		<id column="id" property="id" />
+		<result column="wechatId" property="wechatId" />
+	</resultMap>
+
+	<select id="getInvoiceRecordList" resultMap="resultInvoiceRecordList">
+		select * from invoiceRecord
+	</select>
+	<select id="getInvoiceRecordListByTaxpayerId" resultMap="resultInvoiceRecordList" parameterType="HashMap">
+		select * from clientData where taxpayerId = #{taxpayerId}
+	</select>
+	<select id="getInvoiceRecordListByCompanyName" resultMap="resultInvoiceRecordList" parameterType="HashMap">
+		select * from clientData where companyName = #{companyName}
+	</select>
+	<select id="getInvoiceRecordByTaxpayerId" resultType="InvoiceRecord" parameterType="HashMap">
+		select * from invoiceRecord where taxpayerId = #{taxpayerId}
+	</select>
+	<select id="getInvoiceRecordByCompanyName" resultType="InvoiceRecord" parameterType="HashMap">
+		select * from invoiceRecord where companyName = #{companyName}
+	</select>
+</mapper>

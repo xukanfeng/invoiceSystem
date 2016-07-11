@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TaxcontrolSettingDao">
+	<resultMap type="TaxcontrolSetting" id="resultTaxcontrolSettingList">
+		<id column="id" property="id" />
+		<result column="companyName" property="companyName" />
+		<result column="shopName" property="shopName" />
+		<result column="machineId" property="machineId" />
+		<result column="taxpayerId" property="taxpayerId" />
+		<result column="companyAddress" property="companyAddress" />
+		<result column="phoneNumber" property="phoneNumber" />
+		<result column="bankName" property="bankName" />
+		<result column="accountName" property="accountName" />
+		<result column="isDefault" property="isDefault" />
+	</resultMap>
+
+	<select id="getTaxcontrolSettingList" resultMap="resultTaxcontrolSettingList">
+		select * from taxcontrolSetting
+	</select>
+
+	<update id="setTaxcontrolSettingDefault" parameterType="TaxcontrolSetting">
+		update taxcontrolSetting set isDefault = #{isDefault} where shopName = #{shopName}
+	</update>
+
+	<insert id="addTaxcontrolSetting" parameterType="TaxcontrolSetting" useGeneratedKeys="true" keyProperty="id">
+		insert ignore into taxcontrolSetting(companyName, shopName, machineId, taxpayerId, companyAddress, phoneNumber,
+		bankName, accountName, isDefault)
+		values(#{companyName}, #{shopName}, #{machineId}, #{taxpayerId}, #{companyAddress}, #{phoneNumber}, #{bankName},
+		#{accountName}, #{isDefault})
+	</insert>
+
+	<delete id="deleteTaxcontrolSetting" parameterType="HashMap">
+		delete from taxcontrolSetting where shopName = #{shopName}
+	</delete>
+
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ClientDataDao">
+	<resultMap type="ClientData" id="resultClientDataList">
+		<id column="id" property="id" />
+		<result column="wechatId" property="wechatId" />
+		<result column="companyName" property="companyName" />
+		<result column="taxpayerId" property="taxpayerId" />
+		<result column="companyAddress" property="companyAddress" />
+		<result column="phoneNumber" property="phoneNumber" />
+		<result column="bankName" property="bankName" />
+		<result column="accountName" property="accountName" />
+	</resultMap>
+
+	<select id="getClientDataList" resultMap="resultClientDataList">
+		select * from clientData
+	</select>
+	<select id="getClientDataListByWechatId" resultMap="resultClientDataList" parameterType="HashMap">
+		select * from clientData where wechatId = #{wechatId}
+	</select>
+	<select id="getClientDataListByCompanyName" resultMap="resultClientDataList" parameterType="HashMap">
+		select * from clientData where companyName = #{companyName}
+	</select>
+	<select id="getClientDataListByTaxpayerId" resultMap="resultClientDataList" parameterType="HashMap">
+		select * from clientData where taxpayerId = #{taxpayerId}
+	</select>
+	<select id="getClientDataByTaxpayerId" resultType="ClientData" parameterType="HashMap">
+		select * from clientData where taxpayerId = #{taxpayerId}
+	</select>
+	<select id="getClientDataByWechatIdAndCompanyName" resultType="ClientData" parameterType="HashMap">
+		select * from clientData where companyName = #{companyName} and wechatId = #{wechatId}
+	</select>
+	<insert id="addClientData" parameterType="ClientData" useGeneratedKeys="true" keyProperty="id">
+		insert ignore into clientData(wechatId, companyName, taxpayerId, companyAddress, phoneNumber, bankName, accountName)
+		values(#{wechatId}, #{companyName}, #{taxpayerId}, #{companyAddress}, #{phoneNumber}, #{bankName}, #{accountName})
+	</insert>
+</mapper>
