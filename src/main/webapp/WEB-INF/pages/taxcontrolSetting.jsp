@@ -26,6 +26,12 @@
     <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+	
+		<script type="text/javascript">
+			function searchTaxcontrolSetting(){
+						document.getElementById("searchTaxcontrolSetting").href=document.getElementById("companyNameOrTaxpayerId").value?"/searchTaxcontrolSetting?input="+document.getElementById("companyNameOrTaxpayerId").value:"#"
+				}
+		</script>
 </head>
 <body>
 <div class="container">
@@ -52,17 +58,15 @@
     </c:forEach>
 
     <br />
-    <form:form action="/searchTaxcontrolSetting" method="post" commandName="taxcontrolSetting" role="form">
-        <div class="row">
-            <div class="col-md-6">
-                <input type="text" class="form-control input-sm" id="companyNameOrTaxpayerId" name="companyNameOrTaxpayerId" placeholder="请输入用户企业名称或者纳税人识别号">
-            </div>
-            <div class="col-md-6">
-                <a href="/searchTaxcontrolSetting" type="button" class="btn btn-default btn-sm">查询</a>
-                <a href="/addTaxcontrolSetting" type="button" class="btn btn-success btn-sm">新增</a>
-            </div>
+    <div class="row">
+        <div class="col-md-6">
+            <input type="text" class="form-control input-sm" id="companyNameOrTaxpayerId" name="companyNameOrTaxpayerId" placeholder="请输入用户企业名称或者纳税人识别号">
         </div>
-    </form:form>
+        <div class="col-md-6">
+            <a href="#" id="searchTaxcontrolSetting" type="button" class="btn btn-default btn-sm" onclick="searchTaxcontrolSetting()">查询</a>
+            <a href="/addTaxcontrolSetting" type="button" class="btn btn-success btn-sm">新增</a>
+        </div>
+    </div>
     <br />
 
     <!-- 如果用户列表为空 -->

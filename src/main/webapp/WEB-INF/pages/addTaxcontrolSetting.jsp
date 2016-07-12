@@ -30,7 +30,7 @@
 <div class="container">
     <h1>SpringMVC 添加用户</h1>
     <hr/>
-    <form:form action="/addTaxcontrolSettingPost" method="post" commandName="user" role="form">
+    <form:form action="/addTaxcontrolSettingPost" method="post" commandName="taxcontrolSetting" role="form">
         <!-- 使用Spring的form标签，可以方便的收集整块数据，commondName=“user”说明form内的内容都保存在这个user实例中 -->
         <!-- 然后将整个user实例传递给controller处理。在所有的input标签中，name一定要与UserEntity中的成员相同，不然无法找到 -->
         <result column="companyName" property="companyName" />
@@ -41,7 +41,6 @@
         <result column="phoneNumber" property="phoneNumber" />
         <result column="bankName" property="bankName" />
         <result column="accountName" property="accountName" />
-        <result column="isDefault" property="isDefault" />
 
         <div class="form-group">
             <label for="companyName">公司名称:</label>

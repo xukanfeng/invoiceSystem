@@ -26,6 +26,12 @@
     <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+	
+		<script type="text/javascript">
+				function searchInvoiceRecord(){
+						document.getElementById("searchInvoiceRecord").href=document.getElementById("companyNameOrTaxpayerId").value?"/searchInvoiceRecord?input="+document.getElementById("companyNameOrTaxpayerId").value:"#"
+				}
+		</script>
 </head>
 <body>
 <div class="container">
@@ -39,17 +45,15 @@
     </ul>
 
     <br />
-    <form:form action="/searchInvoiceRecord" method="post" commandName="invoiceRecord" role="form">
-        <div class="row">
-            <div class="col-md-6">
-                <input type="text" class="form-control input-sm" id="companyNameOrTaxpayerId" name="companyNameOrTaxpayerId" placeholder="请输入用户企业名称或者纳税人识别号">
-            </div>
-            <div class="col-md-6">
-                <a href="/searchInvoiceRecord" type="button" class="btn btn-default btn-sm">查询</a>
-                <a href="/addInvoiceRecord" type="button" class="btn btn-success btn-sm">新增</a>
-            </div>
+    <div class="row">
+        <div class="col-md-6">
+            <input type="text" class="form-control input-sm" id="companyNameOrTaxpayerId" name="companyNameOrTaxpayerId" placeholder="请输入用户企业名称或者纳税人识别号">
         </div>
-    </form:form>
+        <div class="col-md-6">
+            <a href="#" type="button" id="searchInvoiceRecord" class="btn btn-default btn-sm" onclick="searchInvoiceRecord()">查询</a>
+            <a href="/addInvoiceRecord" type="button" class="btn btn-success btn-sm">新增</a>
+        </div>
+    </div>
     <br />
 
     <!-- 如果用户列表为空 -->

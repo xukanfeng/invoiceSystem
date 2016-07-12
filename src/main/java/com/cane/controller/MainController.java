@@ -270,7 +270,7 @@ public class MainController {
         return "clientData";
     }
     @RequestMapping(value = "/searchClientData", method = RequestMethod.GET)
-    public String getClientData(String companyNameOrTaxpayerId, ModelMap modelMap) {
+    public String searchClientData(String companyNameOrTaxpayerId, ModelMap modelMap) {
         if(null == companyNameOrTaxpayerId) return null;
         if(Character.isDigit(companyNameOrTaxpayerId.charAt(0))) {
             List<ClientDataEntity> clientList = clientDataDao.getClientDataListByCompanyName(companyNameOrTaxpayerId);
@@ -290,29 +290,39 @@ public class MainController {
         return "invoiceRecord";
     }
     @RequestMapping(value = "/searchInvoiceRecord", method = RequestMethod.GET)
-    @ResponseBody
-    public String searchInvoiceRecord(ModelMap modelMap, String companyNameOrTaxpayerId, String from) {
-        if (!StringUtils.isEmpty(companyNameOrTaxpayerId)) {
-            InvoiceRecordEntity invoiceRecordList = invoiceRecordDao.getInvoiceRecordByCompanyNameOrTaxpayerId(companyNameOrTaxpayerId);
+    public String searchInvoiceRecord(String companyNameOrTaxpayerId, ModelMap modelMap) {
+        if(null == companyNameOrTaxpayerId) return null;
+        if(Character.isDigit(companyNameOrTaxpayerId.charAt(0))) {
+            List<InvoiceRecordEntity> invoiceRecordList = invoiceRecordDao.getInvoiceRecordListByCompanyName(companyNameOrTaxpayerId);
             modelMap.addAttribute("invoiceRecordList", invoiceRecordList);
-            return "invoiceRecord";
-//            JSONObject result = new JSONObject();
-//            try {
-//                if (invoiceRecordList != null) {
-//
-//                }
-//            } catch (Exception e) {
-//
-//            }
-//            renderJson(result.toString());
         }
-        return "invoiceRecord";
+        else {
+            List<InvoiceRecordEntity> invoiceRecordList = invoiceRecordDao.getInvoiceRecordListByTaxpayerId(companyNameOrTaxpayerId);
+            modelMap.addAttribute("invoiceRecordList", invoiceRecordList);
+        }
+
+        return "redirect:/invoiceRecord";
     }
     @RequestMapping(value = "/taxcontrolSetting", method = RequestMethod.GET)
     public String getTaxcontrolSetting(ModelMap modelMap) {
         List<TaxcontrolSettingEntity> taxcontrolSettingList = taxcontrolSettingDao.getTaxcontrolSettingList();
         modelMap.addAttribute("taxcontrolSettingList", taxcontrolSettingList);
         return "taxcontrolSetting";
+    }
+    @RequestMapping(value = "/searchTaxcontrolSetting", method = RequestMethod.GET)
+    public String searchTaxcontrolSetting(String companyNameOrTaxpayerId, ModelMap modelMap) {
+       	/*
+				if(null == companyNameOrTaxpayerId) return null;
+        if(Character.isDigit(companyNameOrTaxpayerId.charAt(0))) {
+            List<TaxcontrolSettingEntity> taxcontrolSettingList = taxcontrolSettingDao.getTaxcontrolSettingListByCompanyName(companyNameOrTaxpayerId);
+            modelMap.addAttribute("taxcontrolSettingList", taxcontrolSettingList);
+        }
+        else {
+            List<TaxcontrolSettingEntity> taxcontrolSettingList = taxcontrolSettingDao.getTaxcontrolSettingListByTaxpayerId(companyNameOrTaxpayerId);
+            modelMap.addAttribute("taxcontrolSettingList", taxcontrolSettingList);
+        }
+				*/
+        return "redirect:/taxcontrolSetting";
     }
 
     public final class MatrixToImageWriter {
