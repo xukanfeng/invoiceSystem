@@ -5,17 +5,29 @@
 <mapper namespace="InvoiceRecordDao">
 	<resultMap type="InvoiceRecord" id="resultInvoiceRecordList">
 		<id column="id" property="id" />
+		<result column="shopName" property="shopName" />
+		<result column="machineId" property="machineId" />
+		<result column="companyName" property="companyName" />
+		<result column="taxpayerId" property="taxpayerId" />
 		<result column="wechatId" property="wechatId" />
+		<result column="invoiceDate" property="invoiceDate" />
+		<result column="amount" property="amount" />
+		<result column="unitPrice" property="unitPrice" />
+		<result column="totalPriceWithoutTax" property="totalPriceWithoutTax" />
+		<result column="taxRate" property="taxRate" />
+		<result column="taxPrice" property="taxPrice" />
+		<result column="totalPrice" property="totalPrice" />
+		<result column="status" property="status" />
 	</resultMap>
 
 	<select id="getInvoiceRecordList" resultMap="resultInvoiceRecordList">
 		select * from invoiceRecord
 	</select>
 	<select id="getInvoiceRecordListByTaxpayerId" resultMap="resultInvoiceRecordList" parameterType="HashMap">
-		select * from clientData where taxpayerId = #{taxpayerId}
+		select * from invoiceRecord where taxpayerId = #{taxpayerId}
 	</select>
 	<select id="getInvoiceRecordListByCompanyName" resultMap="resultInvoiceRecordList" parameterType="HashMap">
-		select * from clientData where companyName = #{companyName}
+		select * from invoiceRecord where companyName = #{companyName}
 	</select>
 	<select id="getInvoiceRecordByTaxpayerId" resultType="InvoiceRecord" parameterType="HashMap">
 		select * from invoiceRecord where taxpayerId = #{taxpayerId}

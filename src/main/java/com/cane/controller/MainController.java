@@ -14,8 +14,10 @@ import com.google.zxing.common.BitMatrix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -48,8 +50,8 @@ public class MainController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET) /* @RequestMapping()注解：用于定义一个请求映射，value为请求的url，值为 / 说明，该请求首页请求，method用以指定该请求类型，一般为get和post */
     public String index() { /* 定义了所需访问的jsp的名字 */
-        return "invoice"; /* 处理完该请求后返回的页面，此请求返回 index.jsp页面 */
-    }
+        return "invoice";
+    } /* 处理完该请求后返回的页面，此请求返回 index.jsp页面 */
 
 
 //    // 添加用户 页面
@@ -263,6 +265,20 @@ public class MainController {
         modelMap.addAttribute("clientData", clientData);
         return "showQRcode";
     }
+    /////////////////////
+    @RequestMapping(value = "/invoice", method = RequestMethod.GET)
+    public String invoice(ModelMap modelMap) {
+        ClientDataEntity clientData = clientDataDao.getClientDataByWechatIdAndCompanyName("xukanfeng", "用友能源有限公司"); //@@get para form wechat
+        modelMap.addAttribute("clientData", clientData);
+        TaxcontrolSettingEntity taxcontrolSetting = taxcontrolSettingDao.getTaxcontrolSettingByDefault();
+        modelMap.addAttribute("taxcontrolSetting", taxcontrolSetting);
+        return "invoice";
+    }
+    @RequestMapping(value = "/invoicePost", method = RequestMethod.POST)
+    public String addClientDataPost(@ModelAttribute("invoiceData") InvoiceRecordEntity invoiceRecordEntity) { /* @ModelAttribute注解：收集post过来的数据（在此，相当于post过来了一整个userEntity，不用一个一个地取） */
+        invoiceRecordDao.addInvoiceRecord(invoiceRecordEntity);
+        return "redirect:/invoiceRecord";
+    }
     @RequestMapping(value = "/clientData", method = RequestMethod.GET)
     public String getClientData(ModelMap modelMap) {
         List<ClientDataEntity> clientList = clientDataDao.getClientDataList();
@@ -273,14 +289,23 @@ public class MainController {
     public String searchClientData(String companyNameOrTaxpayerId, ModelMap modelMap) {
         if(null == companyNameOrTaxpayerId) return null;
         if(Character.isDigit(companyNameOrTaxpayerId.charAt(0))) {
-            List<ClientDataEntity> clientList = clientDataDao.getClientDataListByCompanyName(companyNameOrTaxpayerId);
-            modelMap.addAttribute("clientList", clientList);
-        }
-        else {
             List<ClientDataEntity> clientList = clientDataDao.getClientDataListByTaxpayerId(companyNameOrTaxpayerId);
             modelMap.addAttribute("clientList", clientList);
         }
+        else {
+            List<ClientDataEntity> clientList = clientDataDao.getClientDataListByCompanyName(companyNameOrTaxpayerId);
+            modelMap.addAttribute("clientList", clientList);
+        }
 
+        return "clientData";
+    }
+    @RequestMapping(value = "/addClientData", method = RequestMethod.GET)
+    public String addClientData() {
+        return "addClientData";
+    }
+    @RequestMapping(value = "/addClientDataPost", method = RequestMethod.POST)
+    public String addClientDataPost(@ModelAttribute("clientData") ClientDataEntity clientDataEntity) { /* @ModelAttribute注解：收集post过来的数据（在此，相当于post过来了一整个userEntity，不用一个一个地取） */
+        clientDataDao.addClientData(clientDataEntity);
         return "redirect:/clientData";
     }
     @RequestMapping(value = "/invoiceRecord", method = RequestMethod.GET)
@@ -293,15 +318,15 @@ public class MainController {
     public String searchInvoiceRecord(String companyNameOrTaxpayerId, ModelMap modelMap) {
         if(null == companyNameOrTaxpayerId) return null;
         if(Character.isDigit(companyNameOrTaxpayerId.charAt(0))) {
-            List<InvoiceRecordEntity> invoiceRecordList = invoiceRecordDao.getInvoiceRecordListByCompanyName(companyNameOrTaxpayerId);
-            modelMap.addAttribute("invoiceRecordList", invoiceRecordList);
-        }
-        else {
             List<InvoiceRecordEntity> invoiceRecordList = invoiceRecordDao.getInvoiceRecordListByTaxpayerId(companyNameOrTaxpayerId);
             modelMap.addAttribute("invoiceRecordList", invoiceRecordList);
         }
+        else {
+            List<InvoiceRecordEntity> invoiceRecordList = invoiceRecordDao.getInvoiceRecordListByCompanyName(companyNameOrTaxpayerId);
+            modelMap.addAttribute("invoiceRecordList", invoiceRecordList);
+        }
 
-        return "redirect:/invoiceRecord";
+        return "invoiceRecord";
     }
     @RequestMapping(value = "/taxcontrolSetting", method = RequestMethod.GET)
     public String getTaxcontrolSetting(ModelMap modelMap) {
@@ -311,18 +336,16 @@ public class MainController {
     }
     @RequestMapping(value = "/searchTaxcontrolSetting", method = RequestMethod.GET)
     public String searchTaxcontrolSetting(String companyNameOrTaxpayerId, ModelMap modelMap) {
-       	/*
-				if(null == companyNameOrTaxpayerId) return null;
+        if(null == companyNameOrTaxpayerId) return null;
         if(Character.isDigit(companyNameOrTaxpayerId.charAt(0))) {
-            List<TaxcontrolSettingEntity> taxcontrolSettingList = taxcontrolSettingDao.getTaxcontrolSettingListByCompanyName(companyNameOrTaxpayerId);
-            modelMap.addAttribute("taxcontrolSettingList", taxcontrolSettingList);
-        }
-        else {
             List<TaxcontrolSettingEntity> taxcontrolSettingList = taxcontrolSettingDao.getTaxcontrolSettingListByTaxpayerId(companyNameOrTaxpayerId);
             modelMap.addAttribute("taxcontrolSettingList", taxcontrolSettingList);
         }
-				*/
-        return "redirect:/taxcontrolSetting";
+        else {
+            List<TaxcontrolSettingEntity> taxcontrolSettingList = taxcontrolSettingDao.getTaxcontrolSettingListByCompanyName(companyNameOrTaxpayerId);
+            modelMap.addAttribute("taxcontrolSettingList", taxcontrolSettingList);
+        }
+        return "taxcontrolSetting";
     }
 
     public final class MatrixToImageWriter {
@@ -387,24 +410,31 @@ public class MainController {
         modelMap.addAttribute("clientList", clientList);
         return "companyList";
     }
-
-    @RequestMapping(value = "/invoice", method = RequestMethod.GET)
-    public String invoice(ModelMap modelMap) {
-        ClientDataEntity clientData = clientDataDao.getClientDataByWechatIdAndCompanyName("xukanfeng", "用友能源有限公司"); //@@get para form wechat
-        modelMap.addAttribute("clientData", clientData);
-        return "invoice";
-    }
     @RequestMapping(value = "/setDefaultTaxcontrolSetting", method = RequestMethod.GET)
     public String setDefaultTaxcontrolSetting(ModelMap modelMap) {
         List<TaxcontrolSettingEntity> taxcontrolSettingList = taxcontrolSettingDao.getTaxcontrolSettingList();
         modelMap.addAttribute("taxcontrolSettingList", taxcontrolSettingList);
         return "taxcontrolSetting";
     }
-    @RequestMapping(value = "/deleteTaxcontrolSetting/{shopName}", method = RequestMethod.GET)
-    public String deleteTaxcontrolSetting(@PathVariable("shopName") String shopName) {
-
-        taxcontrolSettingDao.deleteTaxcontrolSetting(shopName);
+    @RequestMapping(value = "/deleteTaxcontrolSetting", method = RequestMethod.GET)
+    public String deleteTaxcontrolSetting(String shopName, String machineId) {
+        taxcontrolSettingDao.deleteTaxcontrolSetting(shopName, machineId);
         return "redirect:/taxcontrolSetting";
+    }
+    @RequestMapping(value = "/updateTaxcontrolSetting", method = RequestMethod.GET)
+    public String updateTaxcontrolSetting(String shopName, String machineId, ModelMap modelMap) {
+        TaxcontrolSettingEntity taxcontrolSetting = taxcontrolSettingDao.getTaxcontrolSetting(shopName, machineId); //@@get para form wechat
+        modelMap.addAttribute("taxcontrolSetting", taxcontrolSetting);
+        return "updateTaxcontrolSetting";
+    }
+    @RequestMapping(value = "/updateTaxcontrolSettingPost", method = RequestMethod.GET)
+    public String updateTaxcontrolSettingPost(String shopName, String machineId) {
+
+        return "redirect:/taxcontrolSetting";
+    }
+    @RequestMapping(value = "/addTaxcontrolSetting", method = RequestMethod.GET)
+    public String addTaxcontrolSetting() {
+        return "addTaxcontrolSetting";
     }
     @RequestMapping(value = "/addTaxcontrolSettingPost", method = RequestMethod.POST)
     public String addTaxcontrolSettingPost(@ModelAttribute("taxcontrolSetting") TaxcontrolSettingEntity taxcontrolSettingEntity) { /* @ModelAttribute注解：收集post过来的数据（在此，相当于post过来了一整个userEntity，不用一个一个地取） */

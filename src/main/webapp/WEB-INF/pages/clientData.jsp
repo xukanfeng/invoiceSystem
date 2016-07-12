@@ -26,11 +26,13 @@
     <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
 		<![endif]-->
 
-		<script type="text/javascript">
-			function searchClientData(){
-						document.getElementById("searchClientdata").href=document.getElementById("companyNameOrTaxpayerId").value?"/searchClientData?input="+document.getElementById("companyNameOrTaxpayerId").value:"#"
-				}
-		</script>
+    <script type="text/javascript">
+        function searchClientData(){
+            if(document.getElementById("companyNameOrTaxpayerId").value != ""){
+                document.getElementById("searchClientData").href="/searchClientData?companyNameOrTaxpayerId=" + document.getElementById("companyNameOrTaxpayerId").value;
+            }
+        }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -49,7 +51,7 @@
             <input type="text" class="form-control input-sm" id="companyNameOrTaxpayerId" name="companyNameOrTaxpayerId" placeholder="请输入用户企业名称或者纳税人识别号">
         </div>
         <div class="col-md-6">
-            <a href="#" id="searchClientData" type="button" class="btn btn-default btn-sm" onclick="searchclientData()">查询</a>
+            <a href="#" id="searchClientData" type="button" class="btn btn-default btn-sm" onclick="searchClientData()">查询</a>
             <a href="/addClientData" type="button" class="btn btn-success btn-sm">新增</a>
         </div>
     </div>
@@ -72,8 +74,6 @@
                 <th>微信号</th>
                 <th>企业名称</th>
                 <th>纳税人识别号</th>
-                <th>公司注册地址</th>
-                <th>联系电话</th>
                 <th>开户行</th>
                 <th>开户行账户</th>
             </tr>
@@ -82,17 +82,18 @@
                 <tr>
                     <td>${status.count}</td>
                     <td>${client.wechatId}</td>
-                    <td>${client.companyName}</td>
+                    <td>
+                        <a title="企业详细信息"
+                           data-container="body" data-toggle="popover" data-placement="right"
+                           data-html="true"
+                           data-content="注册地址:${client.companyAddress}<br />
+                                         联系电话:${client.phoneNumber}">
+                                ${client.companyName}
+                        </a>
+                    </td>
                     <td>${client.taxpayerId}</td>
-                    <td>${client.companyAddress}</td>
-                    <td>${client.phoneNumber}</td>
                     <td>${client.bankName}</td>
                     <td>${client.accountName}</td>
-                    <!--
-                    <td>
-                        <a href="/deleteClientData/${client.phoneNumber}" type="button" class="btn btn-sm btn-danger">删除</a>
-                    </td>
-                    -->
                 </tr>
             </c:forEach>
         </table>
@@ -104,5 +105,18 @@
 
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("[data-toggle='popover']").each(function() {
+            $(this).popover({
+                trigger: 'manual',
+            }).on("mouseenter", function() {
+                $(this).popover("show");
+            }).on("mouseleave", function() {
+                $(this).popover("hide");
+            });
+        });
+    })
+</script>
 </body>
 </html>

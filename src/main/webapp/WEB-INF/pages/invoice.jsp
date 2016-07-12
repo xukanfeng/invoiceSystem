@@ -31,6 +31,9 @@
         window.onload = function(){
             document.getElementById("content").focus();
         }
+//        document.addEventListener("DOMContentLoaded", function(){
+//              document.body.style.display = "block";
+//        });
         function toDecimal2(x) {
             var f = parseFloat(x);
             if (isNaN(f)) {
@@ -57,7 +60,9 @@
             else{
                 document.getElementById("taxPrice").value = toDecimal2(totalPriceWithoutTax * 0.06);
             }
-
+            document.getElementById("priceSum").value = document.getElementById("totalPriceWithoutTax").value;
+            document.getElementById("taxSum").value = document.getElementById("taxPrice").value;
+            //document.getElementById("sum").value = document.getElementById("priceSum").value + document.getElementById("taxSum").value;
         }
     </script>
 </head>
@@ -164,20 +169,66 @@
         font-size: 10px;
         float: left;
     }
-    .priceSum{
-        margin-top: 400px;
-        font-size: 10px;
-    }
-    .taxSum{
-        margin-top: 400px;
-        font-size: 10px;
+    .padding{
+        height: 95px;
     }
     .sum{
-        margin-top: 400px;
+        height: 16px;
+        margin-top: 2px;
+    }
+    .priceSum{
+        width: 98px;
+        height: 16px;
+        margin-left: 503px;
+        text-align: right;
         font-size: 10px;
+        float: left;
+    }
+    .taxSum{
+        width: 95px;
+        height: 16px;
+        margin-left: 40px;
+        text-align: right;
+        font-size: 10px;
+        float: left;
+    }
+    .priceAndTaxSum{
+        margin-top: 7px;
+        height: 16px;
+    }
+    .chineseNumerals{
+        width: 280px;
+        height: 16px;
+        margin-left: 250px;
+        text-align: left;
+        font-size: 10px;
+        float: left;
+    }
+    .arabicNumerals{
+        width: 100px;
+        height: 16px;
+        margin-left: 80px;
+        text-align: left;
+        font-size: 10px;
+        float: left;
+    }
+    .taxcontrolSetting{
+        margin-top: 7px;
+        margin-left: 176px;
+        height: 68px;
+        width: 260px;
+        float: left;
+    }
+    .salesData{
+        height: 16px;
+        width: 260px;
+        margin: 0px;
+        padding: 0px;
+        font-size: 10px;
+        float: left;
     }
     .confirm{
-        margin-top: 280px;
+        margin-top: 120px;
     }
     .clear{
         clear:both;
@@ -187,55 +238,76 @@
 </style>
 <body>
 <div class="container">
-    <div>
-        <h2>开发票</h2>
-        <hr/>
-        <ul class="nav nav-tabs">
-            <li role="presentation" class="active"><a href="/invoice">开发票</a></li>
-            <li role="presentation"><a href="/clientData">用户管理</a></li>
-            <li role="presentation"><a href="/invoiceRecord">开票记录</a></li>
-            <li role="presentation"><a href="/taxcontrolSetting">税控设置</a></li>
-        </ul>
-        <div align="center">
+    <h2>开发票</h2>
+    <hr/>
+    <ul class="nav nav-tabs">
+        <li role="presentation" class="active"><a href="/invoice">开发票</a></li>
+        <li role="presentation"><a href="/clientData">用户管理</a></li>
+        <li role="presentation"><a href="/invoiceRecord">开票记录</a></li>
+        <li role="presentation"><a href="/taxcontrolSetting">税控设置</a></li>
+    </ul>
+    <div align="center">
         <div class="invoiceBackground">
-            <form:form action="/doInvoice" method="post" commandName="client" role="form">
-            <c:if test="${!empty clientData}">
-                <div class="clientData">
-                    <input type="text" class="clientDataInput" id="companyName" value=${clientData.companyName}>
-                    <input type="text" class="clientDataInput" id="taxpayerId" value=${clientData.taxpayerId}>
-                    <input type="text" class="clientDataInput" id="companyAddressAndphoneNumber" value=${clientData.companyAddress} + ${clientData.phoneNumber}>
-                    <input type="text" class="clientDataInput" id="bankNameAndaccountName" value=${clientData.bankName} + ${clientData.accountName}>
+            <form:form action="/invoicePost" method="post" commandName="invoiceData" role="form">
+                <result column="shopName" property="shopName" />
+                <result column="machineId" property="machineId" />
+                <result column="companyName" property="companyName" />
+                <result column="taxpayerId" property="taxpayerId" />
+                <result column="wechatId" property="wechatId" />
+                <result column="invoiceDate" property="invoiceDate" />
+                <result column="amount" property="amount" />
+                <result column="unitPrice" property="unitPrice" />
+                <result column="totalPriceWithoutTax" property="totalPriceWithoutTax" />
+                <result column="taxRate" property="taxRate" />
+                <result column="taxPrice" property="taxPrice" />
+                <result column="totalPrice" property="totalPrice" />
+                <result column="status" property="status" />
+                
+                <c:if test="${!empty clientData}">
+                    <div class="clientData">
+                        <input type="text" class="clientDataInput" id="companyName" value=${clientData.companyName}>
+                        <input type="text" class="clientDataInput" id="taxpayerId" value=${clientData.taxpayerId}>
+                        <input type="text" class="clientDataInput" id="companyAddressAndPhoneNumber" value="${clientData.companyAddress} ${clientData.phoneNumber}">
+                        <input type="text" class="clientDataInput" id="bankNameAndAccountName" value="${clientData.bankName} ${clientData.accountName}">
+                    </div>
+                </c:if>
+                <div class="clear"></div>
+                <div class="invoiceContent">
+                    <input type="text" class="column1" id="content" placeholder="货物或应税劳务名称"/>
+                    <input type="text" class="column2" id="model" placeholder="规格型号"/>
+                    <select class="column3" id="unit">
+                        <option value="个">个</option>
+                        <option value="件">件</option>
+                        <option value="套" selected="selected">套</option>
+                    </select>
+                    <input type="text" class="column4" id="amount" placeholder="数量" onblur="calculatePrice()"/>
+                    <input type="text" class="column5" id="unitPrice" placeholder="单价" onblur="calculatePrice()"/>
+                    <input type="text" class="column6" id="totalPriceWithoutTax" readonly="readonly" placeholder="金额"/>
+                    <select class="column7" id="taxRate" onchange="calculatePrice()">
+                        <option value="6%">6%</option>
+                        <option value="17%" selected="selected">17%</option>
+                    </select>
+                    <input type="text" class="column8" id="taxPrice" readonly="readonly" placeholder="税额"/>
                 </div>
-            </c:if>
-            <div class="clear"></div>
-            <div class="invoiceContent">
-                        <input type="text" class="column1" id="content" placeholder="货物或应税劳务名称"/>
-                        <input type="text" class="column2" id="model" placeholder="规格型号"/>
-                        <select class="column3" id="unit">
-                            <option value="个">个</option>
-                            <option value="件">件</option>
-                            <option value="套" selected="selected">套</option>
-                        </select>
-                        <input type="text" class="column4" id="amount" placeholder="数量" onblur="calculatePrice()"/>
-                        <input type="text" class="column5" id="unitPrice" placeholder="单价" onblur="calculatePrice()"/>
-                        <input type="text" class="column6" id="totalPriceWithoutTax" readonly="readonly" placeholder="金额"/>
-                        <select class="column7" id="taxRate" onchange="calculatePrice()">
-                            <option value="6%">6%</option>
-                            <option value="17%" selected="selected">17%</option>
-                        </select>
-                        <input type="text" class="column8" id="taxPrice" readonly="readonly" placeholder="税额"/>
-            </div>
-                <!--
-            <div class="priceSum">
-                <input type="number" readonly="readonly" id="priceSum"/>
-            </div>
-            <div class="taxSum">
-                <input type="number" readonly="readonly" id="taxSum"/>
-            </div>
-            <div class="sum">
-                <input type="number" readonly="readonly" id="sum"/>
-            </div>
-            -->
+                <div class="clear"></div>
+                <div class="padding"></div>
+                <div class="sum">
+                    <input type="text" class="priceSum" readonly="readonly" id="priceSum"/>
+                    <input type="text" class="taxSum" readonly="readonly" id="taxSum"/>
+                </div>
+                <div class="priceAndTaxSum">
+                    <input type="text" class="chineseNumerals" readonly="readonly" id="chineseNumeralsSum"/>
+                    <input type="text" class="arabicNumerals" readonly="readonly" id="arabicNumeralsSum"/>
+                </div>
+
+                <c:if test="${!empty taxcontrolSetting}">
+                    <div class="taxcontrolSetting">
+                        <input type="text" class="salesData" id="_companyName" readonly="readonly" value=${taxcontrolSetting.companyName}>
+                        <input type="text" class="salesData" id="_taxpayerId" readonly="readonly" value=${taxcontrolSetting.taxpayerId}>
+                        <input type="text" class="salesData" id="_companyAddressAndPhoneNumber" readonly="readonly" value="${taxcontrolSetting.companyAddress} ${taxcontrolSetting.phoneNumber}">
+                        <input type="text" class="salesData" id="_bankNameAndAccountName" readonly="readonly" value="${taxcontrolSetting.bankName} ${taxcontrolSetting.accountName}">
+                    </div>
+                </c:if>
                 <div class="confirm">
                     <div class="col-md-4"></div>
                     <div class="col-md-4">
@@ -243,9 +315,7 @@
                     </div>
                     <div class="col-md-4"></div>
                 </div>
-
             </form:form>
-        </div>
         </div>
     </div>
 </div>

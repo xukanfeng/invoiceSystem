@@ -27,11 +27,13 @@
     <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 	
-		<script type="text/javascript">
-				function searchInvoiceRecord(){
-						document.getElementById("searchInvoiceRecord").href=document.getElementById("companyNameOrTaxpayerId").value?"/searchInvoiceRecord?input="+document.getElementById("companyNameOrTaxpayerId").value:"#"
-				}
-		</script>
+    <script type="text/javascript">
+        function searchInvoiceRecord() {
+            if (document.getElementById("companyNameOrTaxpayerId").value != "") {
+                document.getElementById("searchInvoiceRecord").href = "/searchInvoiceRecord?companyNameOrTaxpayerId=" + document.getElementById("companyNameOrTaxpayerId").value;
+            }
+        }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -51,7 +53,9 @@
         </div>
         <div class="col-md-6">
             <a href="#" type="button" id="searchInvoiceRecord" class="btn btn-default btn-sm" onclick="searchInvoiceRecord()">查询</a>
+            <!--
             <a href="/addInvoiceRecord" type="button" class="btn btn-success btn-sm">新增</a>
+            -->
         </div>
     </div>
     <br />
@@ -89,7 +93,7 @@
                 <tr>
                     <td>${status.count}</td>
                     <td>
-                        <a title="公司详细信息"
+                        <a title="详细信息"
                            data-container="body" data-toggle="popover" data-placement="right"
                            data-html="true"
                            data-content="税控机编号:${invoiceRecord.machineId}<br />
@@ -135,19 +139,16 @@
 <script type="text/javascript">
     $(function () {
         $("[name='checkbox']").bootstrapSwitch();
-        $("[data-toggle='popover']").popover()({
-
+        $("[data-toggle='popover']").each(function() {
+            $(this).popover({
+                trigger: 'manual',
+            }).on("mouseenter", function() {
+                $(this).popover("show");
+            }).on("mouseleave", function() {
+                $(this).popover("hide");
+            });
         });
     })
-
-    $("#searchInvoiceRecord").on("click", function() {
-        $.get('/searchInvoiceRecord',{
-            companyNameOrTaxpayerId: $('#companyNameOrTaxpayerId').val(),
-            from:'invoiceRecord'
-        },function(data){
-            alert(data.value);
-        },dataType='json');
-    });
 </script>
 </body>
 </html>

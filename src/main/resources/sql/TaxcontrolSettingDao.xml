@@ -19,20 +19,28 @@
 	<select id="getTaxcontrolSettingList" resultMap="resultTaxcontrolSettingList">
 		select * from taxcontrolSetting
 	</select>
-
+	<select id="getTaxcontrolSetting" resultType="TaxcontrolSetting" parameterType="HashMap">
+		select * from taxcontrolSetting where shopName = #{shopName} and machineId = #{machineId}
+	</select>
+	<select id="getTaxcontrolSettingByDefault" resultType="TaxcontrolSetting" parameterType="HashMap">
+		select * from taxcontrolSetting where isDefault = #{isDefault}
+	</select>
+	<select id="getTaxcontrolSettingListByTaxpayerId" resultMap="resultTaxcontrolSettingList" parameterType="HashMap">
+		select * from taxcontrolSetting where taxpayerId = #{taxpayerId}
+	</select>
+	<select id="getTaxcontrolSettingListByCompanyName" resultMap="resultTaxcontrolSettingList" parameterType="HashMap">
+		select * from taxcontrolSetting where companyName = #{companyName}
+	</select>
 	<update id="setTaxcontrolSettingDefault" parameterType="TaxcontrolSetting">
 		update taxcontrolSetting set isDefault = #{isDefault} where shopName = #{shopName}
 	</update>
-
 	<insert id="addTaxcontrolSetting" parameterType="TaxcontrolSetting" useGeneratedKeys="true" keyProperty="id">
 		insert ignore into taxcontrolSetting(companyName, shopName, machineId, taxpayerId, companyAddress, phoneNumber,
 		bankName, accountName, isDefault)
 		values(#{companyName}, #{shopName}, #{machineId}, #{taxpayerId}, #{companyAddress}, #{phoneNumber}, #{bankName},
 		#{accountName}, #{isDefault})
 	</insert>
-
 	<delete id="deleteTaxcontrolSetting" parameterType="HashMap">
-		delete from taxcontrolSetting where shopName = #{shopName}
+		delete from taxcontrolSetting where shopName = #{shopName} and machineId = #{machineId}
 	</delete>
-
 </mapper>

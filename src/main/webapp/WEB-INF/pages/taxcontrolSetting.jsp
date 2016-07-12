@@ -28,9 +28,11 @@
     <![endif]-->
 	
 		<script type="text/javascript">
-			function searchTaxcontrolSetting(){
-						document.getElementById("searchTaxcontrolSetting").href=document.getElementById("companyNameOrTaxpayerId").value?"/searchTaxcontrolSetting?input="+document.getElementById("companyNameOrTaxpayerId").value:"#"
-				}
+			function searchTaxcontrolSetting() {
+                if (document.getElementById("companyNameOrTaxpayerId").value != "") {
+                    document.getElementById("searchTaxcontrolSetting").href = "/searchTaxcontrolSetting?companyNameOrTaxpayerId=" + document.getElementById("companyNameOrTaxpayerId").value;
+                }
+            }
 		</script>
 </head>
 <body>
@@ -86,9 +88,9 @@
         <table class="table table-bordered table-striped">
             <tr>
                 <th>编号</th>
-                <th>企业名称</th>
                 <th>店面名称</th>
                 <th>税控机编号</th>
+                <th>企业名称</th>
                 <th>纳税人识别号</th>
                 <th>设为默认</th>
                 <th>操作</th>
@@ -97,19 +99,19 @@
             <c:forEach items="${taxcontrolSettingList}" var="taxcontrolSetting" varStatus="status">
                 <tr>
                     <td>${status.count}</td>
+                    <td>${taxcontrolSetting.shopName}</td>
+                    <td>${taxcontrolSetting.machineId}</td>
                     <td>
-                        <a title="公司详细信息"
-                                data-container="body" data-toggle="popover" data-placement="right"
-                                data-html="true"
-                                data-content="注册地址:${taxcontrolSetting.companyAddress}<br />
+                        <a title="企业详细信息"
+                           data-container="body" data-toggle="popover" data-placement="right"
+                           data-html="true"
+                           data-content="注册地址:${taxcontrolSetting.companyAddress}<br />
                                               联系电话:${taxcontrolSetting.phoneNumber}<br />
                                               开户银行:${taxcontrolSetting.bankName}<br />
                                               银行帐号:${taxcontrolSetting.accountName}">
                                 ${taxcontrolSetting.companyName}
                         </a>
                     </td>
-                    <td>${taxcontrolSetting.shopName}</td>
-                    <td>${taxcontrolSetting.machineId}</td>
                     <td>${taxcontrolSetting.taxpayerId}</td>
                     <td>
                         <div class="switch switch-mini" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove'></i>">
@@ -124,7 +126,8 @@
                         </div>
                     </td>
                     <td>
-                        <a href="/deleteTaxcontrolSetting/${taxcontrolSetting.shopName}" type="button" class="btn btn-sm btn-danger">删除</a>
+                        <a href="/deleteTaxcontrolSetting?shopName=${taxcontrolSetting.shopName}&machineId=${taxcontrolSetting.machineId}" type="button" class="btn btn-sm btn-danger">删除</a>
+                        <a href="/updateTaxcontrolSetting?shopName=${taxcontrolSetting.shopName}&machineId=${taxcontrolSetting.machineId}" type="button" class="btn btn-sm btn-success">修改</a>
                     </td>
                 </tr>
             </c:forEach>
@@ -143,8 +146,14 @@
 <script type="text/javascript">
     $(function () {
         $("[name='checkbox']").bootstrapSwitch();
-        $("[data-toggle='popover']").popover()({
-
+        $("[data-toggle='popover']").each(function() {
+            $(this).popover({
+                trigger: 'manual',
+            }).on("mouseenter", function() {
+                $(this).popover("show");
+            }).on("mouseleave", function() {
+                $(this).popover("hide");
+            });
         });
     })
 </script>

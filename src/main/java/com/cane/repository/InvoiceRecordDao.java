@@ -36,4 +36,6 @@ public class InvoiceRecordDao extends AbstractDao {
         map.put("companyName",companyName);
         return sqlSession.selectList(sql(), map);
     }
+    public void addInvoiceRecord(InvoiceRecordEntity invoiceRecord) {sqlSession.insert(sql(), invoiceRecord);}
+
 }
