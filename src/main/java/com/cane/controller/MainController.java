@@ -1,12 +1,10 @@
 package com.cane.controller;
 
 import com.cane.model.ClientDataEntity;
+import com.cane.model.InvoiceHeaderEntity;
 import com.cane.model.InvoiceRecordEntity;
 import com.cane.model.TaxcontrolSettingEntity;
-import com.cane.repository.ClientDataDao;
-import com.cane.repository.InvoiceRecordDao;
-import com.cane.repository.ManagerDao;
-import com.cane.repository.TaxcontrolSettingDao;
+import com.cane.repository.*;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -47,6 +44,8 @@ public class MainController {
     InvoiceRecordDao invoiceRecordDao;
     @Autowired
     TaxcontrolSettingDao taxcontrolSettingDao;
+    @Autowired
+    InvoiceHeaderDao invoiceHeaderDao;
 
     @RequestMapping(value = "/", method = RequestMethod.GET) /* @RequestMapping()注解：用于定义一个请求映射，value为请求的url，值为 / 说明，该请求首页请求，method用以指定该请求类型，一般为get和post */
     public String index() { /* 定义了所需访问的jsp的名字 */
@@ -266,17 +265,28 @@ public class MainController {
         return "showQRcode";
     }
     /////////////////////
+//    @RequestMapping(value = "/invoice", method = RequestMethod.GET)
+//    public String invoice(ModelMap modelMap) {
+//        ClientDataEntity clientData = clientDataDao.getClientDataByWechatIdAndCompanyName("xukanfeng", "用友能源有限公司"); //@@get para form wechat
+//        modelMap.addAttribute("clientData", clientData);
+//        TaxcontrolSettingEntity taxcontrolSetting = taxcontrolSettingDao.getTaxcontrolSettingByDefault();
+//        modelMap.addAttribute("taxcontrolSetting", taxcontrolSetting);
+//        return "invoice";
+//    }
+//    @RequestMapping(value = "/invoicePost", method = RequestMethod.POST)
+//    public String addClientDataPost(@ModelAttribute("invoiceData") InvoiceRecordEntity invoiceRecordEntity) { /* @ModelAttribute注解：收集post过来的数据（在此，相当于post过来了一整个userEntity，不用一个一个地取） */
+//        invoiceRecordDao.addInvoiceRecord(invoiceRecordEntity);
+//        return "redirect:/invoiceRecord";
+//    }
     @RequestMapping(value = "/invoice", method = RequestMethod.GET)
     public String invoice(ModelMap modelMap) {
-        ClientDataEntity clientData = clientDataDao.getClientDataByWechatIdAndCompanyName("xukanfeng", "用友能源有限公司"); //@@get para form wechat
-        modelMap.addAttribute("clientData", clientData);
         TaxcontrolSettingEntity taxcontrolSetting = taxcontrolSettingDao.getTaxcontrolSettingByDefault();
         modelMap.addAttribute("taxcontrolSetting", taxcontrolSetting);
         return "invoice";
     }
     @RequestMapping(value = "/invoicePost", method = RequestMethod.POST)
-    public String addClientDataPost(@ModelAttribute("invoiceData") InvoiceRecordEntity invoiceRecordEntity) { /* @ModelAttribute注解：收集post过来的数据（在此，相当于post过来了一整个userEntity，不用一个一个地取） */
-        invoiceRecordDao.addInvoiceRecord(invoiceRecordEntity);
+    public String addClientDataPost(@ModelAttribute("invoiceHeader") InvoiceHeaderEntity invoiceHeaderEntity) { /* @ModelAttribute注解：收集post过来的数据（在此，相当于post过来了一整个userEntity，不用一个一个地取） */
+        invoiceHeaderDao.addInvoiceHeader(invoiceHeaderEntity);
         return "redirect:/invoiceRecord";
     }
     @RequestMapping(value = "/clientData", method = RequestMethod.GET)

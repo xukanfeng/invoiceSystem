@@ -7,6 +7,9 @@
         <class>com.cane.model.ClientDataEntity</class>
         <class>com.cane.model.TaxcontrolSettingEntity</class>
         <class>com.cane.model.InvoiceRecordEntity</class>
+        <class>com.cane.model.InvoiceContentEntity</class>
+        <class>com.cane.model.InvoiceFooterEntity</class>
+        <class>com.cane.model.InvoiceHeaderEntity</class>
         <properties>
             <!-- 使用MySQL方言 -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>

@@ -8,11 +8,17 @@
         <typeAlias alias="ClientData" type="com.cane.model.ClientDataEntity" />
         <typeAlias alias="InvoiceRecord" type="com.cane.model.InvoiceRecordEntity" />
         <typeAlias alias="TaxcontrolSetting" type="com.cane.model.TaxcontrolSettingEntity" />
+        <typeAlias alias="InvoiceHeader" type="com.cane.model.InvoiceHeaderEntity" />
+        <typeAlias alias="InvoiceContent" type="com.cane.model.InvoiceContentEntity" />
+        <typeAlias alias="InvoiceFooter" type="com.cane.model.InvoiceFooterEntity" />
     </typeAliases>
     <mappers>
         <mapper resource="sql/ManagerDao.xml" />
         <mapper resource="sql/ClientDataDao.xml" />
         <mapper resource="sql/InvoiceRecordDao.xml" />
         <mapper resource="sql/TaxcontrolSettingDao.xml" />
+        <mapper resource="sql/InvoiceHeaderDao.xml" />
+        <mapper resource="sql/InvoiceContentDao.xml" />
+        <mapper resource="sql/InvoiceFooterDao.xml" />
     </mappers>
 </configuration>
